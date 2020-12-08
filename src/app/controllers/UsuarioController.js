@@ -25,7 +25,7 @@ class UsuarioController {
 
         const {id, nome, email} = await Usuario.create(req.body);
         
-        return res.json({id,nome,email});
+        return res.json('ok');
     }
 
     // Faz a alteração da senha do usuário

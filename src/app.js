@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 var bodyparser = require("body-parser");
 var cors = require("cors");
 
-//const usuarioRota = require("./routes/usuario");
+const usuarioRota = require("./routes/usuario");
 
 const path = require('path');
 const routes = require('./routes');
@@ -26,7 +26,8 @@ class App {
 
     routes(){
         // Definição das rotas por módulos
-        //this.server.use('/auth',authRota);
+        this.server.use('/usuario', usuarioRota);
+        
         this.server.get('/', async (req,res) => {
             // variavel tem o nome da tabela que será criada
             return res.send('Rota Ok');

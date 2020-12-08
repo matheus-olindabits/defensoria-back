@@ -9,17 +9,17 @@ class Usuario extends Model {
         {
             nome: Sequelize.STRING,
             email : Sequelize.STRING,
-            senha : Sequelize.VIRTUAL,
-            senha_hash: Sequelize.STRING
+            senha : Sequelize.STRING,
+            senha_hash: Sequelize.VIRTUAL
         },{
-            sequelize, modelName: 'FP_USUARIO', // define o nome da tabela
+            sequelize, modelName: 'USUARIO', // define o nome da tabela
             freezeTableName: true, // tira o s que o sequelize acrescenta 
             timestamps: true // por padrao em datas coloca a data do momento.
         });
 
         this.addHook('beforeSave', async (usuario) => {
             if (usuario.senha){
-                usuario.senha_hash = await bcrypt.hash(usuario.senha, 8);
+                usuario.senha = await bcrypt.hash(usuario.senha, 8);
             }
         });
 

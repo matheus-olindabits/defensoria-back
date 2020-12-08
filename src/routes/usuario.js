@@ -1,10 +1,9 @@
 const { Router } = require('express');
-const multer = require('multer');
-const multerConfig = require('../config/multer');
-
 const UsuarioController = require('../app/controllers/UsuarioController');
+//const authMiddleware = require('../app/middlewares/auth');
 
 const routes =  new Router();
+//routes.use(authMiddleware);
 
 routes.post('/cadastro', UsuarioController.cadastroUsuario);
 
