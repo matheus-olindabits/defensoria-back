@@ -3,7 +3,6 @@ const Usuario = require('../models/Usuario');
 
 class UsuarioController {
 
-    // Faz o cadastro do usuario
     async cadastroUsuario(req,res){
 
         // Faz a validacao dos campos
@@ -28,30 +27,54 @@ class UsuarioController {
         return res.json('ok');
     }
 
-    // Faz a alteração da senha do usuário
-    async alterarSenha(req,res){
+
+    async listarUsuarios(req,res){
+        const usuarios = await Usuario.findAll({
+            order: [
+                ['nome', 'ASC'],
+            ],
+            attributes: [ 'id', 'nome' ]
+        });
+        
+        return res.json(usuarios);
+    }
+
+
+    async obterUsuario(req,res){
+        
+        const obterUsuario = await Usuario.findOne({
+            where:{ id: req.params.id }, 
+            attributes: [ 'id', 'nome', 'email']
+        });
+        
+        return res.json(obterUsuario);
+    }
+
+    async alterarUsuario(req,res){
+        
+        let { id, nome, email } = req.body;
 
         // Faz a validacao dos campos
         const schema = Yup.object().shape({
-            senha_old: Yup.string().required().min(6),
-            senha: Yup.string().required().min(6),
+            nome: Yup.string().required(),
+            email: Yup.string().required()
         });
 
         if(!(await schema.isValid(req.body))){
             return res.status(400).json({error:'Validação dos campos inválida'});
         }
 
-        const { senha_old, senha } = req.body;
+        const userExist = await Usuario.findOne({where:{ email: email }});
 
-        const user = await Usuario.findByPk(req.usuarioId);
-
-        if(!(await user.verificaSenha(senha_old))){
-            return res.status(401).json({ error:'Senha Atual está inválida' });
+        if(userExist){
+            return res.status(400).json({error:'Email já existente'});
         }
 
-        const { senha_hash } = await user.update(req.body);
+        const usuario = await Usuario.findByPk(id);
 
-        res.json(senha_hash);
+        var retorno = await usuario.update({id: parseInt(id), nome: nome, email: email});
+        
+        return res.json(retorno);
     }
 
 }

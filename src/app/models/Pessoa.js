@@ -18,7 +18,6 @@ class Pessoa extends Model {
         });
 
         return this;
-
     }
 
     static associate(models){

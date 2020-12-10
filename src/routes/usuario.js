@@ -6,5 +6,8 @@ const routes =  new Router();
 //routes.use(authMiddleware);
 
 routes.post('/cadastro', UsuarioController.cadastroUsuario);
+routes.get('/listagem', UsuarioController.listarUsuarios);
+routes.get('/obter/:id', UsuarioController.obterUsuario);
+routes.put('/alterar', UsuarioController.alterarUsuario);
 
 module.exports = routes;
