@@ -28,6 +28,7 @@ class UsuarioController {
     }
 
 
+
     async listarUsuarios(req,res){
         const usuarios = await Usuario.findAll({
             order: [
@@ -40,6 +41,7 @@ class UsuarioController {
     }
 
 
+
     async obterUsuario(req,res){
         
         const obterUsuario = await Usuario.findOne({
@@ -50,11 +52,12 @@ class UsuarioController {
         return res.json(obterUsuario);
     }
 
+
+
     async alterarUsuario(req,res){
         
         let { id, nome, email } = req.body;
 
-        // Faz a validacao dos campos
         const schema = Yup.object().shape({
             nome: Yup.string().required(),
             email: Yup.string().required()
