@@ -22,7 +22,7 @@ class Pessoa extends Model {
     }
 
     static associate(models){
-        this.hasMany(PessoaEndereco, {as: 'endereco', foreignKey: 'idPessoa'})
+        this.hasOne(PessoaEndereco, {as: 'endereco', foreignKey: 'idPessoa'}); // hasOne -> object / hasMany -> array
     }
 
 }

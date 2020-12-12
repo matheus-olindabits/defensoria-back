@@ -7,6 +7,7 @@ var cors = require("cors");
 // Rotas dos models
 const usuarioRota = require("./routes/usuario");
 const pessoaRota = require("./routes/pessoa");
+const assuntoRota = require("./routes/assunto");
 
 const path = require('path');
 const routes = require('./routes');
@@ -30,6 +31,7 @@ class App {
         // Definição das rotas por módulos
         this.server.use('/usuario', usuarioRota);
         this.server.use('/pessoa', pessoaRota);
+        this.server.use('/assunto', assuntoRota);
     }
 }
 

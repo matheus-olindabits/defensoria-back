@@ -63,25 +63,32 @@ class UsuarioController {
         let { id, nome, email } = req.body;
 
         const schema = Yup.object().shape({
-            nome: Yup.string().required()
+            nome: Yup.string().required(),
+            email: Yup.string().email().required(),
         });
 
         if(!(await schema.isValid(req.body))){
             return res.status(400).json({error:'Validação dos campos inválida'});
         }
 
-        // const userExist = await Usuario.findOne({where:{ email: email }});
-
-        // if(userExist){
-        //     return res.status(400).json({error:'Email já existente'});
-        // }
-
         const usuario = await Usuario.findByPk(id);
 
-        var retorno = await usuario.update({id: parseInt(id), nome: nome});
+        if(email != usuario.email){
+            const emailExist = await Usuario.findOne({where:{ email: email }});
+
+            if(emailExist){
+                return res.status(400).json({error:'Email já cadastrado'});
+            }  
+        }
+
+        console.log('email:', email);
+
+        var retorno = await usuario.update({ id: parseInt(id), nome: nome, email: email });
         
         return res.json(retorno);
     }
+
+
 
 }
 
