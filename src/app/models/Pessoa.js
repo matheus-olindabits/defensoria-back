@@ -1,6 +1,7 @@
 const  { Model } = require('sequelize');
 const Sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
+const PessoaEndereco = require('./PessoaEndereco');
 
 class Pessoa extends Model {
     static init(sequelize){
@@ -21,7 +22,7 @@ class Pessoa extends Model {
     }
 
     static associate(models){
-        //this.belongsTo(File, { foreignKey: 'avatar_id' });
+        this.hasMany(PessoaEndereco, {as: 'endereco', foreignKey: 'idPessoa'})
     }
 
 }

@@ -3,6 +3,8 @@ const Usuario = require('../models/Usuario');
 
 class UsuarioController {
 
+
+    
     async cadastroUsuario(req,res){
 
         // Faz a validacao dos campos
@@ -23,6 +25,8 @@ class UsuarioController {
         }
 
         const {id, nome, email} = await Usuario.create(req.body);
+
+        console.log('Novo Usuário:', id);
         
         return res.json('ok');
     }
@@ -59,23 +63,22 @@ class UsuarioController {
         let { id, nome, email } = req.body;
 
         const schema = Yup.object().shape({
-            nome: Yup.string().required(),
-            email: Yup.string().required()
+            nome: Yup.string().required()
         });
 
         if(!(await schema.isValid(req.body))){
             return res.status(400).json({error:'Validação dos campos inválida'});
         }
 
-        const userExist = await Usuario.findOne({where:{ email: email }});
+        // const userExist = await Usuario.findOne({where:{ email: email }});
 
-        if(userExist){
-            return res.status(400).json({error:'Email já existente'});
-        }
+        // if(userExist){
+        //     return res.status(400).json({error:'Email já existente'});
+        // }
 
         const usuario = await Usuario.findByPk(id);
 
-        var retorno = await usuario.update({id: parseInt(id), nome: nome, email: email});
+        var retorno = await usuario.update({id: parseInt(id), nome: nome});
         
         return res.json(retorno);
     }

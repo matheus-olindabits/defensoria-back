@@ -14,21 +14,21 @@ module.exports = {
         allowNull: false,
       },
       cpf: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: true,
         unique: true,
       },
       rg: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: true,
         unique: true,
       },
       telefone: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: true,
       },
       data_nascimento: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: true,
       },
       created_at:{
