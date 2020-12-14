@@ -8,6 +8,7 @@ var cors = require("cors");
 const usuarioRota = require("./routes/usuario");
 const pessoaRota = require("./routes/pessoa");
 const assuntoRota = require("./routes/assunto");
+const atendimentoRota = require("./routes/atendimento");
 
 const path = require('path');
 const routes = require('./routes');
@@ -32,6 +33,7 @@ class App {
         this.server.use('/usuario', usuarioRota);
         this.server.use('/pessoa', pessoaRota);
         this.server.use('/assunto', assuntoRota);
+        this.server.use('/atendimento', atendimentoRota);
     }
 }
 
