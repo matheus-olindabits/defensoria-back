@@ -81,8 +81,6 @@ class UsuarioController {
             }  
         }
 
-        console.log('email:', email);
-
         var retorno = await usuario.update({ id: parseInt(id), nome: nome, email: email });
         
         return res.json(retorno);
