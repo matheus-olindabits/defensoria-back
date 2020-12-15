@@ -36,9 +36,25 @@ class AtendimentoController {
 
 
 
-    async listarAtendimentos(req,res){
-        const atendimentos = await Atendimento.findAll({
+    async listarAtendimentosEmAberto(req,res){
+
+        let  dataAtual = new Date().toLocaleString('pt-BR', {
+            timeZone: 'America/Sao_Paulo'
+        });
+
+        dataAtual = dataAtual.substring(6,10) + '-' + dataAtual.substring(3,5) + '-' + dataAtual.substring(0,2);
+
+        let atendimentos = await Atendimento.findAll({
+            where:{
+                'status': 0
+            },
+            attributes: [
+                'id', 'titulo', 'observacao', 'status', ['data_conclusao', 'dataConclusao'], 
+                ['id_usuario', 'idUsuario'], ['id_pessoa', 'idPessoa'], ['id_assunto', 'idAssunto'], 
+                Sequelize.literal(`'${dataAtual}' as dataAtual`)
+            ],
             order: [
+                ['dataConclusao', 'DESC'],
                 ['id', 'DESC'],
             ],
             include: [
@@ -49,6 +65,40 @@ class AtendimentoController {
                 {
                     model: Pessoa,
                     as: 'pessoa'
+                },
+                {
+                    model: Assunto,
+                    as: 'assunto'
+                }
+            ],
+        });
+
+        
+        return res.json(atendimentos);
+    }
+
+
+
+    async historicoAtendimentoPessoa(req,res){
+
+        const idPessoa = req.params.id;
+
+        const atendimentos = await Atendimento.findAll({
+            order: [
+                ['status', 'ASC'],
+                ['id', 'DESC'],
+            ],
+            include: [
+                {
+                    model: Usuario,
+                    as: 'usuario'
+                },
+                {
+                    model: Pessoa,
+                    as: 'pessoa',
+                    where: {
+                        id: idPessoa
+                      }
                 },
                 {
                     model: Assunto,

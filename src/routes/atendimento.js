@@ -6,6 +6,7 @@ const routes =  new Router();
 //routes.use(authMiddleware);
 
 routes.post('/cadastro', AtendimentoController.CadastrarAtendimento);
-routes.get('/listagem', AtendimentoController.listarAtendimentos);
+routes.get('/listagem', AtendimentoController.listarAtendimentosEmAberto);
+routes.get('/historico-pessoa/:id', AtendimentoController.historicoAtendimentoPessoa);
 
 module.exports = routes;

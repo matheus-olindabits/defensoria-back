@@ -14,6 +14,7 @@ class Atendimento extends Model {
             observacao: Sequelize.TEXT,
             status: Sequelize.INTEGER,
             dataConclusao: Sequelize.DATEONLY,
+            dataAtual: Sequelize.VIRTUAL,
             arquivo: Sequelize.STRING,
             idUsuario: Sequelize.INTEGER,
             idPessoa: Sequelize.INTEGER,
@@ -21,7 +22,7 @@ class Atendimento extends Model {
         },{
             sequelize, modelName: 'ATENDIMENTO', // define o nome da tabela
             freezeTableName: true, // tira o s que o sequelize acrescenta 
-            timestamps: false // por padrao em datas coloca a data do momento.
+            timestamps: true // por padrao em datas coloca a data do momento.
         });
 
         return this;
