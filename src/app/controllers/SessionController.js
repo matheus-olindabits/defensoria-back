@@ -22,18 +22,18 @@ class SessionController{
         const user = await Usuario.findOne({ where:{ email } });
 
         if(!user){
-            return res.status(401).json({error: 'Usuário não encontrado'});
+            return res.status(401).json({error: 'Usuário e/ou senha inválidos!'});
         }
 
         if(!(await user.verificaSenha(senha))){
-            return res.status(401).json({error: 'Senha inválida' });
+            return res.status(401).json({error: 'Usuário e/ou senha inválidos!' });
         }
 
-        const {id,nome} = user;
+        const { id,nome } = user;
 
         return res.json({
             id,nome,email,
-            token: jwt.sign({ id },AuthConfig.codigo,{ expiresIn: AuthConfig.expiresIn })
+            token: jwt.sign({ id }, AuthConfig.codigo, { expiresIn: AuthConfig.expiresIn })
         });
     }
 

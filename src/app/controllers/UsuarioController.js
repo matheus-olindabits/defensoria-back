@@ -25,8 +25,6 @@ class UsuarioController {
         }
 
         const {id, nome, email} = await Usuario.create(req.body);
-
-        console.log('Novo Usuário:', id);
         
         return res.json('ok');
     }

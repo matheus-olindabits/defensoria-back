@@ -32,7 +32,7 @@ class Usuario extends Model {
     }
 
     verificaSenha(senha){
-        return bcrypt.compare(senha, this.senha_hash);
+        return bcrypt.compare(senha, this.senha);
     }
 }
 
