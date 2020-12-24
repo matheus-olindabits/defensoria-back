@@ -36,7 +36,7 @@ class UsuarioController {
             order: [
                 ['nome', 'ASC'],
             ],
-            attributes: [ 'id', 'nome' ]
+            attributes: [ 'id', 'nome', 'email' ]
         });
         
         return res.json(usuarios);
