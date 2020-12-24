@@ -24,7 +24,7 @@ module.exports = {
         unique: true,
       },
       telefone: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       data_nascimento: {

@@ -24,7 +24,7 @@ class UsuarioController {
             return res.status(400).json({error:'Usuário já existente'});
         }
 
-        const {id, nome, email} = await Usuario.create(req.body);
+        await Usuario.create(req.body);
         
         return res.json('ok');
     }

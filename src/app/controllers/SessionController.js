@@ -26,7 +26,7 @@ class SessionController{
         }
 
         if(!(await user.verificaSenha(senha))){
-            return res.status(401).json({error: 'Usuário e/ou senha inválidos!' });
+            return res.status(401).json({error: 'Usuário e/ou senha inválidos.' });
         }
 
         const { id,nome } = user;

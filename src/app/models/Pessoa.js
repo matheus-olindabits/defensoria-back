@@ -10,7 +10,7 @@ class Pessoa extends Model {
             nome: Sequelize.STRING,
             cpf : Sequelize.INTEGER,
             rg : Sequelize.INTEGER,
-            telefone: Sequelize.INTEGER,
+            telefone: Sequelize.STRING,
             dataNascimento: Sequelize.STRING
         },{
             sequelize, modelName: 'PESSOA', // define o nome da tabela

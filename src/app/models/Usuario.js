@@ -17,7 +17,7 @@ class Usuario extends Model {
             timestamps: true // por padrao em datas coloca a data do momento.
         });
 
-        this.addHook('beforeSave', async (usuario) => {
+        this.addHook('beforeCreate', async (usuario) => {
             if (usuario.senha){
                 usuario.senha = await bcrypt.hash(usuario.senha, 8);
             }
