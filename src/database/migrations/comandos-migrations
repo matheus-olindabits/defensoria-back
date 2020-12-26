@@ -3,4 +3,4 @@ node_modules/.bin/sequelize migration:create --name=create-users
 
 node_modules/.bin/sequelize db:migrate
 sequelize db:migrate:undo
-node_modules/.bin/sequelize db:migrate:undo:all --to 20200912161520-create-depoimento.js
+node_modules/.bin/sequelize db:migrate:undo:all --to 20201208010550-tabela-pessoa.js

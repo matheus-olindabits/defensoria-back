@@ -16,44 +16,50 @@ class PessoaController {
 
         const t1 = await sequelize.transaction();
 
-        let pessoa = req.body;
+        try{
 
-        // Faz a validacao dos campos
-        const schema = Yup.object().shape({
-            nome: Yup.string().required()
-        });
+            let pessoa = req.body;
 
-        if(!(await schema.isValid(req.body))){
-            return res.status(400).json({error:'Validação dos campos inválida'});
-        }
+            // Faz a validacao dos campos
+            const schema = Yup.object().shape({
+                nome: Yup.string().required()
+            });
 
-        if(pessoa.cpf){
-            const cpfExist = await Pessoa.findOne({where:{ cpf: pessoa.cpf }});
-
-            if(cpfExist){
-                return res.status(400).json({error:'CPF já cadastrado'});
+            if(!(await schema.isValid(req.body))){
+                return res.status(400).json({error:'Validação dos campos inválida'});
             }
-        }
 
-        if(pessoa.rg){
-            const rgExist = await Pessoa.findOne({where:{ rg: pessoa.rg }});
+            if(pessoa.cpf){
+                const cpfExist = await Pessoa.findOne({where:{ cpf: pessoa.cpf }});
 
-            if(rgExist){
-                return res.status(400).json({error:'RG já cadastrado'});
+                if(cpfExist){
+                    return res.status(400).json({error:'CPF já cadastrado'});
+                }
             }
+
+            if(pessoa.rg){
+                const rgExist = await Pessoa.findOne({where:{ rg: pessoa.rg }});
+
+                if(rgExist){
+                    return res.status(400).json({error:'RG já cadastrado'});
+                }
+            }
+
+            const newPessoa = await Pessoa.create({ nome: pessoa.nome, cpf: pessoa.cpf, rg: pessoa.rg, telefone: pessoa.telefone, dataNascimento: pessoa.dataNascimento }, { transaction: t1 });
+
+            // criacao do endereco da pessoa
+            if(pessoa.endereco.logradouro){
+                pessoa.endereco.idPessoa = newPessoa.id;
+                await PessoaEndereco.create(pessoa.endereco, { transaction: t1 });
+            }
+
+            await t1.commit();
+
+            return res.json('ok');
+        }catch(error){
+            await t1.rollback();
+            return res.status(400).json({error:'Algo ocorreu, não foi possível realizar a ação. Verifique sua conexão e tente novamente!'});
         }
-
-        const newPessoa = await Pessoa.create(pessoa, { transaction: t1 });
-
-        // criacao do endereco da pessoa
-        if(pessoa.endereco){
-            pessoa.endereco.idPessoa = newPessoa.id;
-            await PessoaEndereco.create(pessoa.endereco, { transaction: t1 });
-        }
-
-        await t1.commit();
-
-        return res.json('ok');
 
     }
 
@@ -94,40 +100,63 @@ class PessoaController {
     async alterarPessoa(req, res){
       
         let pessoa = req.body;
+        console.log(pessoa);
 
-        const schema = Yup.object().shape({
-            nome: Yup.string().required()
-        });
+        try{
 
-        if(!(await schema.isValid(req.body))){
-            return res.status(400).json({error:'Validação dos campos inválida'});
-        }
+            const schema = Yup.object().shape({
+                nome: Yup.string().required()
+            });
 
-        const pessoaUpdate = await Pessoa.findByPk(pessoa.id);
+            if(!(await schema.isValid(req.body))){
+                return res.status(400).json({error:'Validação dos campos inválida'});
+            }
 
-        if(pessoa.cpf != pessoaUpdate.cpf){
-            if(pessoa.cpf){
-                const cpfExist = await Pessoa.findOne({where:{ cpf: pessoa.cpf }});
-    
-                if(cpfExist){
-                    return res.status(400).json({error:'CPF já cadastrado'});
+            const pessoaUpdate = await Pessoa.findByPk(pessoa.id);
+
+            if(pessoa.cpf != pessoaUpdate.cpf){
+                if(pessoa.cpf){
+                    const cpfExist = await Pessoa.findOne({where:{ cpf: pessoa.cpf }});
+        
+                    if(cpfExist){
+                        return res.status(400).json({error:'CPF já cadastrado'});
+                    }
                 }
             }
-        }
 
-        if(pessoa.rg != pessoaUpdate.rg){
-            if(pessoa.rg){
-                const rgExist = await Pessoa.findOne({where:{ rg: pessoa.rg }});
-    
-                if(rgExist){
-                    return res.status(400).json({error:'RG já cadastrado'});
-                }
-            }    
-        }
-
-        await pessoaUpdate.update(pessoa);
+            if(pessoa.rg != pessoaUpdate.rg){
+                if(pessoa.rg){
+                    const rgExist = await Pessoa.findOne({where:{ rg: pessoa.rg }});
         
-        return res.json('ok');
+                    if(rgExist){
+                        return res.status(400).json({error:'RG já cadastrado'});
+                    }
+                }    
+            }
+
+            await pessoaUpdate.update(pessoa);
+
+            const pessoaEndereco = await PessoaEndereco.findOne({where:{ idPessoa: pessoa.id }});
+
+            if(pessoa.endereco.logradouro){
+                if(pessoaEndereco){
+                    await pessoaEndereco.update(pessoa.endereco);
+                }else{
+                    pessoa.endereco.idPessoa = pessoa.id;
+                    await PessoaEndereco.create(pessoa.endereco);
+                }
+            }else{
+                if(pessoaEndereco){
+                    await pessoaEndereco.destroy();
+                }
+            }
+
+            return res.json('ok');
+
+        }catch(error){
+            console.log(error);
+            return res.status(400).json({error:'Algo ocorreu, não foi possível realizar a ação. Verifique sua conexão e tente novamente!'});
+        }
         
     }
 

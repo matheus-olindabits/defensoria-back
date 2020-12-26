@@ -41,8 +41,8 @@ class AtendimentoController {
         let  dataAtual = new Date().toLocaleString('pt-BR', {
             timeZone: 'America/Sao_Paulo'
         });
-
-        dataAtual = dataAtual.substring(6,10) + '-' + dataAtual.substring(3,5) + '-' + dataAtual.substring(0,2);
+        
+        dataAtual = dataAtual.substring(0,4) + '-' + dataAtual.substring(5,7) + '-' + dataAtual.substring(8,10);
 
         let atendimentos = await Atendimento.findAll({
             where:{
