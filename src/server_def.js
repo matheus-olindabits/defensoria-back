@@ -1,4 +1,4 @@
-const app = require('./app');
+const app = require('./app_def');
 
 console.log('rodando!');
 // npm run dev - nodemon
