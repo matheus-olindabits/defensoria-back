@@ -48,7 +48,7 @@ class PessoaController {
             const newPessoa = await Pessoa.create({ nome: pessoa.nome, cpf: pessoa.cpf, rg: pessoa.rg, telefone: pessoa.telefone, dataNascimento: pessoa.dataNascimento }, { transaction: t1 });
 
             // criacao do endereco da pessoa
-            if(pessoa.endereco.logradouro){
+            if(pessoa.possuiEndereco){
                 pessoa.endereco.idPessoa = newPessoa.id;
                 await PessoaEndereco.create(pessoa.endereco, { transaction: t1 });
             }
@@ -138,7 +138,7 @@ class PessoaController {
 
             const pessoaEndereco = await PessoaEndereco.findOne({where:{ idPessoa: pessoa.id }});
 
-            if(pessoa.endereco.logradouro){
+            if(pessoa.possuiEndereco){
                 if(pessoaEndereco){
                     await pessoaEndereco.update(pessoa.endereco);
                 }else{
