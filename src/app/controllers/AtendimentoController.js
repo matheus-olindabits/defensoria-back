@@ -20,6 +20,7 @@ class AtendimentoController {
             dataConclusao: Yup.string().required(),
             idPessoa: Yup.string().required(),
             idAssunto: Yup.string().required(),
+            status: Yup.string().required(),
             idUsuario: Yup.string().required()
         });
 
@@ -27,7 +28,7 @@ class AtendimentoController {
             return res.status(400).json({error:'Validação dos campos inválida'});
         }
 
-        atendimento.status = 0;
+        //atendimento.status = 0;
 
         await Atendimento.create(atendimento);
 
@@ -48,7 +49,7 @@ class AtendimentoController {
 
         let atendimentos = await Atendimento.findAll({
             where:{
-                'status': 0
+                'status': [0,2]
             },
             attributes: [
                 'id', 'titulo', 'observacao', 'status', ['data_conclusao', 'dataConclusao'], 
@@ -111,6 +112,7 @@ class AtendimentoController {
         const schema = Yup.object().shape({
             titulo: Yup.string().required(),
             dataConclusao: Yup.string().required(),
+            status: Yup.string().required(),
             idPessoa: Yup.string().required(),
             idAssunto: Yup.string().required(),
             idUsuario: Yup.string().required()
@@ -120,11 +122,15 @@ class AtendimentoController {
             return res.status(400).json({error:'Validação dos campos inválida'});
         }
 
-        const atendimentoUpdate = await Atendimento.findByPk(atendimento.id);
+        let atendimentoUpdate = await Atendimento.findByPk(atendimento.id);
 
         if(!atendimentoUpdate){
             return res.status(400).json({error:'Não foi possível buscar o atendimento'});
         }
+
+        console.log('status', atendimento.status);
+
+        atendimentoUpdate.status = atendimento.status;
 
         await atendimentoUpdate.update(atendimento);
 

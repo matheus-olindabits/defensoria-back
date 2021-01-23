@@ -100,7 +100,6 @@ class PessoaController {
     async alterarPessoa(req, res){
       
         let pessoa = req.body;
-        console.log(pessoa);
 
         try{
 
